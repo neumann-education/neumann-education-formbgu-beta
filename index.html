@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Consulta</title>
+    <!-- SweetAlert CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .form-container {
+            background: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 500px;
+            border: 1px solid #ddd;
+        }
+        .form-container h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 24px;
+            color: #444;
+        }
+        .form-container label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #555;
+        }
+        .form-container input, .form-container select, .form-container textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 25px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background: #f9f9f9;
+            color: #333;
+            font-size: 14px;
+        }
+        .form-container input::placeholder, .form-container textarea::placeholder {
+            color: #aaa;
+        }
+        .form-container button {
+            background: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            transition: background 0.3s ease;
+            font-weight: bold;
+        }
+        .form-container button:hover {
+            background: #0056b3;
+        }
+        .form-container select {
+            appearance: none;
+            background: #f9f9f9 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="%23333"><path d="M7 10l5 5 5-5z"/></svg>') no-repeat right 10px center;
+            background-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Formulario de Consulta</h1>
+        <form onsubmit="enviarCorreo(event)">
+            <label for="asunto">Asunto (Subject):</label>
+            <select id="asunto" name="asunto" required>
+                <option value="1. Compromiso de Pago (Payment Commitment)">1. Compromiso de Pago (Payment Commitment)</option>
+                <option value="2. Deuda (Debt)">2. Deuda (Debt)</option>
+                <option value="3. Habilitación de Campus (Campus Activation)">3. Habilitación de Campus (Campus Activation)</option>
+                <option value="4. Campus Virtual (Virtual Campus)">4. Campus Virtual (Virtual Campus)</option>
+                <option value="5. Acceso al Campus (Campus Access)">5. Acceso al Campus (Campus Access)</option>
+                <option value="6. Activación del Campus (Campus Activation)">6. Activación del Campus (Campus Activation)</option>
+                <option value="7. Pago (Payment)">7. Pago (Payment)</option>
+                <option value="8. Accesos (Accesses)">8. Accesos (Accesses)</option>
+                <option value="9. Plataforma (Platform)">9. Plataforma (Platform)</option>
+                <option value="10. Ampliación de Pago (Payment Extension)">10. Ampliación de Pago (Payment Extension)</option>
+                <option value="11. Mensualidad (Monthly Payment)">11. Mensualidad (Monthly Payment)</option>
+                <option value="12. Cuota (Fee)">12. Cuota (Fee)</option>
+                <option value="13. Cobranza (Collection)">13. Cobranza (Collection)</option>
+                <option value="14. Otros (Others)">14. Otros (Others)</option>
+            </select>
+
+            <label for="nombres">Nombres (First Name):</label>
+            <input type="text" id="nombres" name="nombres" placeholder="Ingrese sus nombres" required>
+
+            <label for="apellidos">Apellidos (Last Name):</label>
+            <input type="text" id="apellidos" name="apellidos" placeholder="Ingrese sus apellidos" required>
+
+            <label for="correo">Correo Electrónico (Email):</label>
+            <input type="email" id="correo" name="correo" placeholder="Ingrese su correo electrónico" required>
+
+            <label for="descripcion">Descripción de la Consulta (Description of the Query):</label>
+            <textarea id="descripcion" name="descripcion" rows="5" placeholder="Escriba aquí su consulta" required></textarea>
+
+            <button type="submit">Enviar (Send)</button>
+        </form>
+    </div>
+
+    <!-- SweetAlert JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function enviarCorreo(event) {
+            event.preventDefault();
+            const asunto = document.getElementById('asunto').value; // Obtiene el valor completo del asunto
+            const nombres = document.getElementById('nombres').value;
+            const apellidos = document.getElementById('apellidos').value;
+            const correo = document.getElementById('correo').value;
+            const descripcion = document.getElementById('descripcion').value;
+
+            // Crear el cuerpo del correo
+            const cuerpoCorreo = `Nombres: ${nombres}\nApellidos: ${apellidos}\nCorreo Electrónico: ${correo}\n\nDescripción de la Consulta:\n${descripcion}`;
+
+            // Mostrar SweetAlert
+            Swal.fire({
+                title: '¡Listo!',
+                text: 'A continuación, abriremos Gmail para que puedas revisar y enviar. Importante: No es necesario que completes el campo "Asunto", ya que te derivaremos directamente a un ejecutivo para tu atención.',
+                icon: 'info',
+                confirmButtonText: 'Aceptar',
+                allowOutsideClick: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Crear el enlace para abrir Gmail
+                    const gmailLink = `https://mail.google.com/mail/?view=cm&fs=1&to=helpdesk@blackwell.university&su=${encodeURIComponent(asunto)}&body=${encodeURIComponent(cuerpoCorreo)}`;
+
+                    // Detectar si es un dispositivo móvil
+                    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+                    if (isMobile) {
+                        // Intentar abrir la aplicación de Gmail en dispositivos móviles
+                        const gmailAppLink = `googlegmail://co?to=helpdesk@blackwell.university&subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(cuerpoCorreo)}`;
+
+                        // Abrir la aplicación de Gmail
+                        window.location.href = gmailAppLink;
+
+                        // Si la aplicación no está instalada, abrir el enlace web después de 2 segundos
+                        setTimeout(() => {
+                            window.location.href = gmailLink;
+                        }, 2000);
+                    } else {
+                        // Abrir Gmail en el navegador para PC
+                        window.open(gmailLink, '_blank');
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
